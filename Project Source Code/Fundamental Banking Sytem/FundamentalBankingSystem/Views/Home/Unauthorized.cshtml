@@ -1,0 +1,33 @@
+﻿@model FundamentalBankingSystem.Models.tbl_Login_details
+
+@{
+    ViewBag.Title = "Unauthorized";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+
+<script type="text/javascript">
+    function preventback() { window.history.forward(); }
+    setTimeout("preventback()", 0);
+    window.onunload = function () { null };
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+<div class="container">
+
+    <div class="col-md-7 col-md-offset-3">
+
+        <center>
+            <p style="font-size:x-large;color:red">
+                Access Denied
+            </p>
+        </center>
+
+        <br />
+        <img src="~/Images/unauth.png" />
+    </div>
+</div>
+}
+
+

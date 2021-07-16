@@ -1,0 +1,85 @@
+﻿
+@model FundamentalBankingSystem.Models.sp_ViewCustomersForDeleteByID_Result
+
+@{
+    ViewBag.Title = "DeleteCustomer";
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+}
+
+<div class="container">
+    <br>
+    <h31>Are you sure you want to delete this customer?</h31>
+    <br>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SSN_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SSN_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateOfBirth)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateOfBirth)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        if (Session["roleid"] != null)
+        {
+            if (Session["roleid"].ToString() == "1")
+            {
+            }
+            else
+            {
+                Response.Redirect("Logout");
+            }
+        }
+        else
+        {
+            Response.Redirect("Logout");
+        }
+
+        @Html.HiddenFor(model => model.CustomerID)
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-danger" /> |
+            @Html.ActionLink("Back to List", "ListCustomer")
+        </div>
+    }
+    <div>
+    </div>
+</div>
+<br>
+

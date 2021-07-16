@@ -1,0 +1,194 @@
+﻿@model IEnumerable<FundamentalBankingSystem.Models.sp_MiniStatement_Result>
+
+@{
+    ViewBag.Title = "Ministatement";
+    Layout = "~/Views/Shared/_CashierLayout.cshtml";
+}
+
+
+<center style="font-size:x-large">Ministatement</center>
+
+<div class="container2">
+    @using (Html.BeginForm("Ministatement", "Home", FormMethod.Get))
+    {
+        <div class="col-md-4 col-md-offset-4">
+            <div class="form-group">
+                <label for="myName">Account Number</label>
+                @Html.Editor("search", new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.id, @readonly = "readonly" } })
+            </div>
+            <div>
+                <b> <font size="4">&#160 Search By:&#160 &#160 &#160 </font> </b>
+                @Html.RadioButton("option", "Date") <text> <font size="4">  Date&#160 &#160 </font> </text>
+                @Html.RadioButton("option", "NoOfTransactions") <text><font size="4"> No of Transactions</font>  </text>
+
+            </div>
+        </div>
+        @*<br>*@
+
+
+        <script src="~/Scripts/jquery-1.10.2.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#ddSectionlsts").hide();
+                $("#lbltransaction").hide();
+                $("#lblStartDate").hide();
+                $("#Start_Date").hide();
+                $("#lblEndDate").hide();
+                $("#End_Date").hide();
+                $("#div").hide();
+
+                if ($("input[name$='option']:checked").val() == 'Date') {
+                    $("#ddSectionlsts").hide();
+                    $("#lbltransaction").hide();
+                    $("#div").show();
+                    $("#lblStartDate").show();
+                    $("#Start_Date").show();
+                    $("#lblEndDate").show();
+                    $("#End_Date").show();
+                } else if ($("input[name$='option']:checked").val() == 'NoOfTransactions') {
+                    $("#lbltransaction").show();
+                    $("#ddSectionlsts").show();
+                    $("#div").hide();
+                } else {
+
+                }
+
+                $("input[name$='option']").click(function () {
+                    $("#ddSectionlsts").hide();
+                    $("#lblStartDate").hide();
+                    $("#Start_Date").hide();
+                    $("#lblEndDate").hide();
+                    $("#End_Date").hide();
+                    $("#div").hide();
+
+                    var test = $(this).val();
+
+                    if (test == 'NoOfTransactions') {
+                        $("#lbltransaction").show();
+                        $("#ddSectionlsts").show();
+                        $("#div").hide();
+                    }
+                    else {
+                        $("#ddSectionlsts").hide();
+                        $("#lbltransaction").hide();
+                        $("#div").show();
+                        $("#lblStartDate").show();
+                        $("#Start_Date").show();
+                        $("#lblEndDate").show();
+                        $("#End_Date").show();
+                    }
+
+                });
+
+            });
+
+        </script>
+
+        <div class="col-md-4 col-md-offset-4">
+            <br>
+            <div class="form-group">
+                @Html.DropDownList("ddSectionlsts", new List<SelectListItem>()
+       {     new SelectListItem() { Text = "5", Value="5" },
+             new SelectListItem() { Text = "10", Value="10" },
+             new SelectListItem() { Text = "20", Value="20" },
+       new SelectListItem() { Text = "40", Value="40" },
+       new SelectListItem() { Text = "50", Value="50" },
+       }, "Number of last Transactions", new { @class = "form-control", @id = "ddSectionlsts" })
+            </div>
+        </div>
+        <div class="container" id="div">
+            <div class="row">
+                <div class="col-md-4 col-sm-4 col-lg-4 col-md-offset-4">
+                    <div class="panel1 panel-primary">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                @Html.Label("Start Date", null, new { @id = "lblStartDate" })
+                                <input type="date" name="Start_Date" id="End_Date" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("End date", null, new { @id = "lblEndDate" })
+                                <input type="date" name="End_Date" id="End_Date" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-4 col-md-offset-5">
+                <button class="btn btn-success" type="submit" name="submit" value="Search" placeholder="Search..." required>
+                    <i class="glyphicon glyphicon-search" aria-hidden="true"></i> Search
+                </button>
+            </div>
+        </div>
+    }
+    <br />
+    <br />
+    <div class=" text-center">
+        <p class="text-danger">@ViewBag.Message</p>
+    </div>
+    @if (ViewBag.Showdiv)
+    {
+
+        <table class="table table-hover table-bordered center order-column" id="tblProducts">
+            <thead class="thead-inverse center" style="background-color:#a1a3a8">
+                <tr>
+                    <th>
+                        <center>
+                            @Html.DisplayName("Transaction ID")
+                        </center>
+                    </th>
+
+                    <th>
+                        <center>
+                            @Html.DisplayName("Type of Transaction")
+                        </center>
+                    </th>
+                    <th>
+                        <center>
+                            @Html.DisplayName("Date of Transaction")
+                        </center>
+                    </th>
+                    <th>
+                        <center>
+                            @Html.DisplayName("Transacted Amount")
+                        </center>
+                    </th>
+
+                </tr>
+            </thead>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TransactionId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Typeoftransaction)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Dateoftransaction)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Amounttransacted)
+                    </td>
+                </tr>
+            }
+
+        </table>
+    }
+</div>
+
+<br>
+<br>
+
+<br>
+<br>
+
+<br>
+<br>
+

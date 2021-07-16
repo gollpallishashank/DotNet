@@ -1,0 +1,130 @@
+﻿@model FundamentalBankingSystem.Models.sp_ViewCustomersByID_Result
+
+@{
+    ViewBag.Title = "UpdateCustomer";
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+}
+
+<script src="https://code.jquery.com/jquery-1.10.2.js" integrity="sha256-it5nQKHTz+34HijZJQkpNBIHsjpV8b6QzMJs9tmOBSo=" crossorigin="anonymous"></script>
+<script>
+    $(function () {
+
+        $('#dropdownStates').change(function () {
+
+            $('#dropdownCities').empty();
+
+            $.ajax({
+                type: "POST",
+                url: "/Home/GetCitiesByStatesId",
+                datatype: "Json",
+                data: { Stateid: $('#dropdownStates').val() },
+                success: function (data) {
+                    $.each(data, function (index, value) {
+                        $('#dropdownCities').append('<option value="' + value.Cityid + '">' + value.Cityname + '</option>');
+                    });
+                }
+            });
+        });
+    });
+    //$(function () {
+    //    $("#date").datepicker({});
+    //});
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    if (Session["roleid"] != null)
+    {
+        if (Session["roleid"].ToString() == "1")
+        {
+
+        }
+        else
+        {
+            Response.Redirect("Logout");
+        }
+    }
+    else
+    {
+        Response.Redirect("Logout");
+    }
+
+
+    <div class="container1">
+        <div class="row">
+            <div class="col-md-6 col-sm-12 col-lg-6 col-md-offset-3">
+                <div class="panel1 panel-primary">
+                    <div class="panel-heading">
+                        Enter Your Details Here
+                    </div>
+                    <div class="panel-body">
+                        <form name="myform">
+                            <div class="form-group">
+                                <label for="myName">Customer ID  </label>
+
+                                @Html.EditorFor(model => model.CustomerID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.CustomerID, "", new { @class = "text-danger" })
+                                <span id="error_name" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="myName">Customer Name </label>
+                                @Html.EditorFor(model => model.CustomerName, new { htmlAttributes = new { @class = "form-control", @maxlength = "100" } })
+                                @Html.ValidationMessageFor(model => model.CustomerName, "", new { @class = "text-danger" })
+                                <span id="error_name" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastname">SSN-ID </label>
+                                @Html.EditorFor(model => model.SSN_ID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @minlength = "9", @maxlength = "9" } })
+                                @Html.ValidationMessageFor(model => model.SSN_ID, "", new { @class = "text-danger" })
+                                <span id="error_lastname" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="age">Date Of Birth</label>
+                                @*@Html.TextBoxFor(model => model.DateOfBirth.Date, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })*@
+                                @Html.EditorFor(model => model.DateOfBirth, new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                @Html.ValidationMessageFor(model => model.DateOfBirth, "", new { @class = "text-danger" })
+                                <p class="text-danger">@ViewBag.Message</p>
+                                <span id="error_age" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="dob">Address Line1 </label>
+                                @Html.EditorFor(model => model.AddressLine1, new { htmlAttributes = new { @class = "form-control", @maxlength = "100" } })
+                                @Html.ValidationMessageFor(model => model.AddressLine1, "", new { @class = "text-danger" })
+                                <span id="error_dob" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="gender">Address Line2</label>
+                                @Html.EditorFor(model => model.AddressLine2, new { htmlAttributes = new { @class = "form-control", @maxlength = "100"  } })
+                                @Html.ValidationMessageFor(model => model.AddressLine2, "", new { @class = "text-danger" })
+                                <span id="error_gender" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">State Name </label>
+                                @Html.DropDownList("dropdownstate", null, new { @class = "form-control", @style = "width:250px;" })
+                                @Html.ValidationMessageFor(model => model.StateID, "", new { @class = "text-danger" })
+                                <span id="error_phone" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="disc">City Name </label>
+                                @Html.DropDownList("dropdowncity", null, new { @class = "form-control", @style = "width:250px;" })
+                                @Html.ValidationMessageFor(model => model.CityID, "", new { @class = "text-danger" })
+                            </div>
+                            <button id="submit" type="submit" value="submit" class="btn btn-success center">Submit</button>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

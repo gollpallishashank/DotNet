@@ -1,0 +1,73 @@
+﻿@model FundamentalBankingSystem.Models.tbl_Customer_Account_Details
+
+@{
+    ViewBag.Title = "AddAccount";
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+
+    if (Session["roleid"] != null)
+    {
+        if (Session["roleid"].ToString() == "1")
+        {
+
+        }
+        else
+        {
+            Response.Redirect("Logout");
+        }
+    }
+    else
+    {
+        Response.Redirect("Logout");
+    }
+
+    <div class="container1">
+        <div class="row">
+            <center><h2>Add Account</h2></center>
+            <div class="col-md-6 col-sm-12 col-lg-6 col-md-offset-3">
+                <div class="panel1 panel-primary">
+                    <div class="panel-heading">
+                        Enter account details
+                    </div>
+                    <div class="panel-body">
+                        <form name="myform">
+                            <div class="text-center">
+                                <p class="text-danger">@ViewBag.Message</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="myName">Customer ID </label>
+                                <label for="myName" class="text-danger">* </label>
+                                @Html.EditorFor(model => model.CustomerId, new { htmlAttributes = new { @class = "form-control", @type = "number", @max = "9999999999", @required = "required" } })
+                                @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group">
+                                <label for="myName">Account Type</label>
+                                <label for="myName" class="text-danger">* </label>
+                                @Html.DropDownListFor(model => model.AccountTypeID, new SelectList(ViewBag.list, "Id", "AccountType"), "--Select One--", new { id = "accttype", @class = "form-control", @style = "width:250px;", @required = "required" })
+                                @Html.ValidationMessageFor(model => model.AccountTypeID, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group">
+                                <label for="myName">Balance </label>
+                                <label for="myName" class="text-danger">* </label>
+                                @Html.EditorFor(model => model.Balance, new { htmlAttributes = new { id = "bal", @class = "form-control", @type = "number", @max = "9999999999999", @required = "required" } })
+                                @Html.ValidationMessageFor(model => model.Balance, "", new { @class = "text-danger" })
+                            </div>
+                            <button id="submit" type="submit" value="submit" class="btn btn-success center">Submit</button>
+                            <button type="reset" class="btn btn-warning center">
+                                Reset
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}

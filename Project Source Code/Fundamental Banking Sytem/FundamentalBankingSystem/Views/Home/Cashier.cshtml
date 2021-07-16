@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewBag.Title = "Cashier";
+    Layout = "~/Views/Shared/_CashierLayout.cshtml";
+}
+
+@if (Session["roleid"] != null)
+{
+    if (Session["roleid"].ToString() == "2")
+    {
+        <center><h2>Welcome @Session["username"]</h2></center>
+    }
+    else
+    {
+        Response.Redirect("Unauthorized");
+    }
+}
+else
+{
+    Response.Redirect("Unauthorized");
+}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-5 col-lg-offset-4 ">
+            <img class="img-fluid" src="~/Images/cashiern.png" alt="" />
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<br />
+<br />

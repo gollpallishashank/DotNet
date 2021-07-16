@@ -1,0 +1,86 @@
+﻿@model FundamentalBankingSystem.Models.sp_ViewAccountsByID_Result
+
+@{
+    ViewBag.Title = "Deposit";
+    Layout = "~/Views/Shared/_CashierLayout.cshtml";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    if (Session["roleid"] != null)
+    {
+        if (Session["roleid"].ToString() == "2")
+        {
+
+        }
+        else
+        {
+            Response.Redirect("Logout");
+        }
+    }
+    else
+    {
+        Response.Redirect("Logout");
+    }
+
+    <div class="container">
+        <div class="row">
+            <br />
+            <center style="font-size:x-large">Deposit Money</center>
+            <div class="col-lg-5 col-lg-offset-1 ">
+
+                <br>
+                <img class="img-fluid" src="~/Images/Deposit.jpg" alt="">
+            </div>
+            <div class="col-lg-4 ">
+                <div class="panel1 panel-primary">
+                    <div class="panel-heading">
+                        Enter details here
+                    </div>
+                    <div class="panel-body">
+                        <form name="myform">
+                            <div class="text-center">
+                                <p class="text-danger">@TempData["Message"]</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="myName">Account Number</label>
+                                <label for="myName" class="text-danger">* </label>
+                                @Html.EditorFor(model => model.AccountNumber, new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.id, @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.AccountNumber, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inputPassword3">
+                                    Balance($)
+                                </label>
+                                <label for="inputPassword3" class="text-danger">* </label>
+                                @Html.EditorFor(model => model.Balance, new { htmlAttributes = new { @class = "form-control", @Value = ViewData["balance"], @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.Balance, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inputPassword3">
+                                    Amount
+                                </label>
+                                <label for="inputPassword3" class="text-danger">* </label>
+                                @Html.Editor("Deposit", new { htmlAttributes = new { @class = "form-control", @required = "required", @type = "number", @max = "9999999999999",@maxlength = "50", @step = "any", @placeholder = "in $", @Value = ViewBag.Amt } })
+                            </div>
+                            <button id="submit" type="submit" value="submit" class="btn btn-success center">Deposit</button>
+
+                            <button type="reset" class="btn btn-warning center">
+                                Reset
+                            </button>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+}
+

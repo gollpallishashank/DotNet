@@ -1,0 +1,114 @@
+﻿@model IEnumerable<FundamentalBankingSystem.Models.sp_SearchAccount_Result>
+
+@{
+    ViewBag.Title = "ListAccount";
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+}
+
+@if (Session["roleid"] != null)
+{
+    if (Session["roleid"].ToString() == "1")
+    {
+
+    }
+    else
+    {
+        Response.Redirect("Logout");
+    }
+}
+else
+{
+    Response.Redirect("Logout");
+}
+
+<div class="container2">
+    @using (Html.BeginForm("ListAccount", "Home", FormMethod.Get))
+    {
+        <div class="row">
+            <br>
+            <div class="col-md-8 col-md-offset-4">
+
+                <b> <font size="4">Search By:&#160 &#160 &#160 </font> </b>
+                @Html.RadioButton("option", "CustomerId") <text> <font size="4">  Customer ID&#160 &#160 </font> </text>
+                @Html.RadioButton("option", "AccountNumber") <text><font size="4"> Account Number </font>  </text>
+
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            @*@Html.TextBox("search")*@
+            <div class="col-md-4 col-md-offset-4">
+                <div class="input-group">
+                    <input id="search" class="form-control" name="search" type="number" placeholder="Enter ID..." />
+                    <span class="input-group-btn">
+                        <button class="btn btn-success" type="submit" name="submit" value="Search" placeholder="Search..." required>
+                            <i class="glyphicon glyphicon-search" aria-hidden="true"></i> Search
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    }
+    <br />
+    <br />
+    <div class="text-center">
+        <p class="text-success">@TempData["Message"]</p>
+    </div>
+    <div class="text-center">
+        <p class="text-danger">@TempData["Message1"]</p>
+    </div>
+    <div class=" text-center">
+        <p class="text-danger">@ViewBag.Message</p>
+    </div>
+    <table class="table table-hover table-bordered center order-column" id="tblProducts">
+        <thead class="thead-inverse center" style="background-color:#a1a3a8">
+            <tr>
+                <th>
+                    <center>
+                        @Html.DisplayName("Customer ID")
+                    </center>
+                </th>
+                <th>
+                    <center>
+                        @Html.DisplayName("Account Number")
+                    </center>
+                </th>
+                <th>
+                    <center>
+                        @Html.DisplayName("Account Type")
+                    </center>
+                </th>
+                <th>
+                    <center>
+                        @Html.DisplayNameFor(model => model.Balance)
+                    </center>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+
+
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AccountNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AccountType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Balance)
+                </td>
+                <td style="color:#3ed871">
+                    @Html.ActionLink("Delete", "DeleteAccount", new { id = item.AccountNumber }, new { @class = "btn btn-danger btn-sm" })
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+

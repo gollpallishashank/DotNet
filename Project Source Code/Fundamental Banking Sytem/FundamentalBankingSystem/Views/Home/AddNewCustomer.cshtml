@@ -1,0 +1,146 @@
+﻿@model FundamentalBankingSystem.Models.tbl_Customer_Details
+
+@{
+    ViewBag.Title = "AddNewCustomer";
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+}
+
+<script src="https://code.jquery.com/jquery-1.10.2.js" integrity="sha256-it5nQKHTz+34HijZJQkpNBIHsjpV8b6QzMJs9tmOBSo=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    $(function () {
+        
+        $.ajax({
+            type: "GET",
+            url: "/Home/GetStates",
+            datatype: "Json",
+            success: function (data) {
+                $.each(data, function (index, value) {
+                    $('#dropdownStates').append('<option value="' + value.Stateid + '">' + value.Statename + '</option>');
+                });
+            }
+        });
+
+        $('#dropdownStates').change(function () {
+
+            $('#dropdownCities').empty();
+
+            $.ajax({
+                type: "POST",
+                url: "/Home/GetCitiesByStatesId",
+                datatype: "Json",
+                data: { Stateid: $('#dropdownStates').val() },
+                success: function (data) {
+                    $.each(data, function (index, value) {
+                        $('#dropdownCities').append('<option value="' + value.Cityid + '">' + value.Cityname + '</option>');
+                    });
+                }
+            });
+        });
+    
+    });
+    //$(function () {
+    //    $("#datepicker").datepicker();
+    //});
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    if (Session["roleid"] != null)
+    {
+        if (Session["roleid"].ToString() == "1")
+        {
+
+        }
+        else
+        {
+            Response.Redirect("Logout");
+        }
+    }
+    else
+    {
+        Response.Redirect("Logout");
+    }
+
+    <div class="container1">
+        <div class="row">
+            <center><h2>Add New Customers</h2></center>
+            <div class="col-md-6 col-sm-12 col-lg-6 col-md-offset-3">
+                <div class="panel1 panel-primary">
+                    <div class="panel-heading">
+                        Enter customer details
+                    </div>
+                    <div class="panel-body">
+                        <form name="myform">
+                            @*<div class="text-center">
+                                    <p class="text-danger">@ViewBag.MessageDate</p>
+                                </div>*@
+
+                            <div class="form-group">
+                                <label for="myName">Customer Name </label>
+                                <label for="myName" class="text-danger">* </label>
+                                @Html.EditorFor(model => model.CustomerName, new { htmlAttributes = new { @class = "form-control", @type = "text", @required = "required", @maxlength = "100" } })
+                                @Html.ValidationMessageFor(model => model.CustomerName, "", new { @class = "text-danger" })
+                                @*<input id="myName" name="myName" class="form-control" type="text" data-validation="required">*@
+                                <span id="error_name" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastname">SSN-ID </label>
+                                <label for="lastname" class="text-danger">* </label>
+                                @Html.EditorFor(model => model.SSN_ID, new { htmlAttributes = new { @class = "form-control", @type = "tel", @maxlength = "9", @required = "required" } })
+                                @Html.ValidationMessageFor(model => model.SSN_ID, "", new { @class = "text-danger" })
+                                @*<input id="lastname" name="lastname" class="form-control" type="text" data-validation="email">*@
+                                <span id="error_lastname" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="age">Date Of Birth </label>
+                                <label for="age" class="text-danger">* </label>
+                                @Html.EditorFor(model => model.DateOfBirth, new { htmlAttributes = new {@class = "form-control", @required = "required" } })
+                                @Html.ValidationMessageFor(model => model.DateOfBirth, "", new { @class = "text-danger" })
+                                <p class="text-danger">@ViewBag.MessageDate</p>
+                                @*<input id="age" name="age" class="form-control" type="number" min="1">*@
+                                <span id="error_age" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="dob">Address Line1 </label>
+                                <label for="dob" class="text-danger">* </label>
+                                @Html.EditorFor(model => model.AddressLine1, new { htmlAttributes = new { @class = "form-control", @required = "required", @maxlength = "100" } })
+                                @Html.ValidationMessageFor(model => model.AddressLine1, "", new { @class = "text-danger" })
+                                @*<input type="date" name="dob" id="dob" class="form-control">*@
+                                <span id="error_dob" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="gender">Address Line2</label>
+                                @Html.EditorFor(model => model.AddressLine2, new { htmlAttributes = new { @class = "form-control", @maxlength = "100" } })
+                                @Html.ValidationMessageFor(model => model.AddressLine2, "", new { @class = "text-danger" })
+                                <span id="error_gender" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">State Name </label>
+                                <label for="phone" class="text-danger">* </label>
+                                @Html.DropDownList("dropdownStates", new SelectList(string.Empty, "Value", "Text"), "Please select a State", new { @class = "form-control", @style = "width:250px;", @required = "required" })
+                                @Html.ValidationMessageFor(model => model.StateID, "", new { @class = "text-danger" })
+                                <span id="error_phone" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="disc">City Name </label>
+                                <label for="disc" class="text-danger">* </label>
+                                @Html.DropDownList("dropdownCities", new SelectList(string.Empty, "Value", "Text"), "Please select a City", new { @class = "form-control", @style = "width:250px;", @required = "required" })
+                                @Html.ValidationMessageFor(model => model.CityID, "", new { @class = "text-danger" })
+                            </div>
+
+                            <button id="submit" type="submit" value="submit" class="btn btn-success center">Submit</button>
+                            <button type="reset" class="btn btn-warning center">
+                                Reset
+                            </button>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
