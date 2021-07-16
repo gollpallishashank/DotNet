@@ -1,0 +1,6 @@
+CREATE TABLE [dbo].[tbl_Login_details] (
+    [loginid] int IDENTITY(1,1) NOT NULL,
+    [username] nvarchar(50)  NOT NULL,
+    [password] nvarchar(100)  NOT NULL,
+    [roleid] int  NOT NULL
+);

@@ -1,0 +1,5 @@
+CREATE TABLE [dbo].[tbl_Customer_Account_Details] (
+    [CustomerId] BIGINT FOREIGN KEY REFERENCES tbl_Customer_Details(CustomerID)  NOT NULL,
+    [AccountID] varchar(12) PRIMARY KEY NOT NULL,
+    [Balance] decimal(10,2)  NULL
+);

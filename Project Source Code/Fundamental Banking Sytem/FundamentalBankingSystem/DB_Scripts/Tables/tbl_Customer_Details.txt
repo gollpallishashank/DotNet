@@ -1,0 +1,15 @@
+CREATE TABLE [dbo].[tbl_Customer_Details](
+	[CustomerID] [bigint] IDENTITY(1,1) NOT NULL,
+	[CustomerName] [nvarchar](max) NULL,
+	[SSN_ID] [bigint] NOT NULL,
+	[DateOfBirth] [datetime] NOT NULL,
+	[AddressLine1] [nvarchar](max) NULL,
+	[AddressLine2] [nvarchar](max) NULL,
+	[StateID] [int] NOT NULL,
+	[CityID] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[CustomerID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO

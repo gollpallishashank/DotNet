@@ -1,0 +1,3 @@
+CREATE TABLE State(
+Stateid INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+Statename nvarchar(max) NULL)

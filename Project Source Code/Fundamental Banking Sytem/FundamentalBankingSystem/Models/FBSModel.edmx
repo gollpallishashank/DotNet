@@ -1,0 +1,697 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="FBSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'DB_A6861A_fbs5.dbo.City' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="City">
+          <Key>
+            <PropertyRef Name="Cityid" />
+            <PropertyRef Name="Stateid" />
+          </Key>
+          <Property Name="Cityid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Stateid" Type="int" Nullable="false" />
+          <Property Name="Cityname" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="State">
+          <Key>
+            <PropertyRef Name="Stateid" />
+          </Key>
+          <Property Name="Stateid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Statename" Type="nvarchar(max)" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'DB_A6861A_fbs5.dbo.tbl_Account_Types' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="tbl_Account_Types">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccountType" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="tbl_Customer_Account_Details">
+          <Key>
+            <PropertyRef Name="AccountNumber" />
+          </Key>
+          <Property Name="CustomerId" Type="bigint" Nullable="false" />
+          <Property Name="AccountNumber" Type="varchar" MaxLength="12" Nullable="false" />
+          <Property Name="Balance" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="AccountTypeID" Type="int" />
+        </EntityType>
+        <EntityType Name="tbl_Customer_Details">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="CustomerID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerName" Type="nvarchar(max)" />
+          <Property Name="SSN_ID" Type="bigint" Nullable="false" />
+          <Property Name="DateOfBirth" Type="datetime" Nullable="false" />
+          <Property Name="AddressLine1" Type="nvarchar(max)" />
+          <Property Name="AddressLine2" Type="nvarchar(max)" />
+          <Property Name="StateID" Type="int" Nullable="false" />
+          <Property Name="CityID" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'DB_A6861A_fbs5.dbo.tbl_Login_details' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="tbl_Login_details">
+          <Key>
+            <PropertyRef Name="loginid" />
+            <PropertyRef Name="username" />
+            <PropertyRef Name="password" />
+            <PropertyRef Name="roleid" />
+          </Key>
+          <Property Name="loginid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="roleid" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_TransactionDetails">
+          <Key>
+            <PropertyRef Name="TransactionId" />
+          </Key>
+          <Property Name="TransactionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SourceAccNum" Type="varchar" MaxLength="12" />
+          <Property Name="DestinationAccNum" Type="varchar" MaxLength="12" />
+          <Property Name="Amounttransacted" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="Typeoftransaction" Type="varchar" MaxLength="50" />
+          <Property Name="Dateoftransaction" Type="datetime" />
+        </EntityType>
+        <Association Name="FK__City__Stateid__2C3393D0">
+          <End Role="State" Type="Self.State" Multiplicity="1" />
+          <End Role="City" Type="Self.City" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="State">
+              <PropertyRef Name="Stateid" />
+            </Principal>
+            <Dependent Role="City">
+              <PropertyRef Name="Stateid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tbl_Custo__Custo__440B1D61">
+          <End Role="tbl_Customer_Details" Type="Self.tbl_Customer_Details" Multiplicity="1" />
+          <End Role="tbl_Customer_Account_Details" Type="Self.tbl_Customer_Account_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Customer_Details">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="tbl_Customer_Account_Details">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="sp_checkLogin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="password" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_DeleteAccount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="acctnumber" Type="varchar" Mode="In" />
+          <Parameter Name="balance" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="sp_DeleteCustomerByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="sp_DepositandWithdraw" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="accountNumber" Type="varchar" Mode="In" />
+          <Parameter Name="type" Type="varchar" Mode="In" />
+          <Parameter Name="balance" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="sp_getAccountsofCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="sp_getcities" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="stateid" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_getstates" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_InsertAccountDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="custid" Type="bigint" Mode="In" />
+          <Parameter Name="accountnumber" Type="varchar" Mode="In" />
+          <Parameter Name="accounttypeid" Type="int" Mode="In" />
+          <Parameter Name="balance" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="sp_InsertCustomerDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="name" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="ssn" Type="bigint" Mode="In" />
+          <Parameter Name="dob" Type="datetime" Mode="In" />
+          <Parameter Name="address1" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="address2" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="state" Type="int" Mode="In" />
+          <Parameter Name="city" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_MiniStatement" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="search" Type="varchar" Mode="In" />
+          <Parameter Name="startdate" Type="datetime" Mode="In" />
+          <Parameter Name="enddate" Type="datetime" Mode="In" />
+          <Parameter Name="transactioncnt" Type="int" Mode="In" />
+          <Parameter Name="selected" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_SearchAccount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="option" Type="int" Mode="In" />
+          <Parameter Name="custid" Type="bigint" Mode="In" />
+          <Parameter Name="acctno" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_SearchCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="option" Type="int" Mode="In" />
+          <Parameter Name="custid" Type="bigint" Mode="In" />
+          <Parameter Name="ssn" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="sp_Transfer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="srcacctnum" Type="varchar" Mode="In" />
+          <Parameter Name="destacctnum" Type="varchar" Mode="In" />
+          <Parameter Name="balance" Type="decimal" Mode="In" />
+          <Parameter Name="type" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_UpdateCustomerDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="bigint" Mode="In" />
+          <Parameter Name="name" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="ssn" Type="bigint" Mode="In" />
+          <Parameter Name="dob" Type="datetime" Mode="In" />
+          <Parameter Name="address1" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="address2" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="state" Type="int" Mode="In" />
+          <Parameter Name="city" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_ViewAccounts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_ViewAccountsByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="acctnumber" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_ViewCustomers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_ViewCustomersByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="sp_ViewCustomersForDeleteByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="bigint" Mode="In" />
+        </Function>
+        <EntityContainer Name="FBSModelStoreContainer">
+          <EntitySet Name="State" EntityType="Self.State" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Customer_Account_Details" EntityType="Self.tbl_Customer_Account_Details" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Customer_Details" EntityType="Self.tbl_Customer_Details" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_TransactionDetails" EntityType="Self.tbl_TransactionDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="City" EntityType="Self.City" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [City].[Cityid] AS [Cityid], 
+    [City].[Stateid] AS [Stateid], 
+    [City].[Cityname] AS [Cityname]
+    FROM [dbo].[City] AS [City]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="tbl_Account_Types" EntityType="Self.tbl_Account_Types" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [tbl_Account_Types].[Id] AS [Id], 
+    [tbl_Account_Types].[AccountType] AS [AccountType]
+    FROM [dbo].[tbl_Account_Types] AS [tbl_Account_Types]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="tbl_Login_details" EntityType="Self.tbl_Login_details" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [tbl_Login_details].[loginid] AS [loginid], 
+    [tbl_Login_details].[username] AS [username], 
+    [tbl_Login_details].[password] AS [password], 
+    [tbl_Login_details].[roleid] AS [roleid]
+    FROM [dbo].[tbl_Login_details] AS [tbl_Login_details]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK__City__Stateid__2C3393D0" Association="Self.FK__City__Stateid__2C3393D0">
+            <End Role="State" EntitySet="State" />
+            <End Role="City" EntitySet="City" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tbl_Custo__Custo__440B1D61" Association="Self.FK__tbl_Custo__Custo__440B1D61">
+            <End Role="tbl_Customer_Details" EntitySet="tbl_Customer_Details" />
+            <End Role="tbl_Customer_Account_Details" EntitySet="tbl_Customer_Account_Details" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FBSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tbl_Login_details">
+          <Key>
+            <PropertyRef Name="loginid" />
+            <PropertyRef Name="username" />
+            <PropertyRef Name="password" />
+            <PropertyRef Name="roleid" />
+          </Key>
+          <Property Name="loginid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="roleid" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="FBSEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tbl_Login_details" EntityType="Self.tbl_Login_details" />
+          <FunctionImport Name="sp_checkLogin" ReturnType="Collection(Int32)">
+          <Parameter Name="password" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="State" EntityType="FBSModel.State" />
+          <EntitySet Name="City" EntityType="FBSModel.City" />
+          <AssociationSet Name="FK__City__Stateid__2C3393D0" Association="FBSModel.FK__City__Stateid__2C3393D0">
+            <End Role="State" EntitySet="State" />
+            <End Role="City" EntitySet="City" />
+          </AssociationSet>
+          <FunctionImport Name="sp_getstates" ReturnType="Collection(FBSModel.sp_getstates_Result)" />
+          <EntitySet Name="tbl_Customer_Details" EntityType="FBSModel.tbl_Customer_Details" />
+          <FunctionImport Name="sp_InsertCustomerDetails">
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="ssn" Mode="In" Type="Int64" />
+            <Parameter Name="dob" Mode="In" Type="DateTime" />
+            <Parameter Name="address1" Mode="In" Type="String" />
+            <Parameter Name="address2" Mode="In" Type="String" />
+            <Parameter Name="state" Mode="In" Type="Int32" />
+            <Parameter Name="city" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_ViewCustomers" ReturnType="Collection(FBSModel.sp_ViewCustomers_Result)" />
+          <FunctionImport Name="sp_getcities" ReturnType="Collection(FBSModel.sp_getcities_Result)">
+          <Parameter Name="stateid" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_UpdateCustomerDetails">
+            <Parameter Name="id" Mode="In" Type="Int64" />
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="ssn" Mode="In" Type="Int64" />
+            <Parameter Name="dob" Mode="In" Type="DateTime" />
+            <Parameter Name="address1" Mode="In" Type="String" />
+            <Parameter Name="address2" Mode="In" Type="String" />
+            <Parameter Name="state" Mode="In" Type="Int32" />
+            <Parameter Name="city" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_ViewCustomersByID" ReturnType="Collection(FBSModel.sp_ViewCustomersByID_Result)">
+          <Parameter Name="id" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <EntitySet Name="tbl_Customer_Account_Details" EntityType="FBSModel.tbl_Customer_Account_Details" />
+          <AssociationSet Name="FK__tbl_Custo__Custo__440B1D61" Association="FBSModel.FK__tbl_Custo__Custo__440B1D61">
+            <End Role="tbl_Customer_Details" EntitySet="tbl_Customer_Details" />
+            <End Role="tbl_Customer_Account_Details" EntitySet="tbl_Customer_Account_Details" />
+          </AssociationSet>
+          <FunctionImport Name="sp_DeleteAccount" ReturnType="Collection(Int32)">
+            <Parameter Name="acctnumber" Mode="In" Type="String" />
+            <Parameter Name="balance" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="sp_InsertAccountDetails" ReturnType="Collection(Int32)">
+            <Parameter Name="custid" Mode="In" Type="Int64" />
+            <Parameter Name="accountnumber" Mode="In" Type="String" />
+            <Parameter Name="accounttypeid" Mode="In" Type="Int32" />
+            <Parameter Name="balance" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="sp_ViewAccounts" ReturnType="Collection(FBSModel.sp_ViewAccounts_Result)" />
+          <EntitySet Name="tbl_Account_Types" EntityType="FBSModel.tbl_Account_Types" />
+          <FunctionImport Name="sp_DeleteCustomerByID" ReturnType="Collection(Int32)">
+          <Parameter Name="id" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="sp_getAccountsofCustomer" ReturnType="Collection(Int32)">
+          <Parameter Name="id" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="sp_SearchAccount" ReturnType="Collection(FBSModel.sp_SearchAccount_Result)">
+            <Parameter Name="option" Mode="In" Type="Int32" />
+            <Parameter Name="custid" Mode="In" Type="Int64" />
+            <Parameter Name="acctno" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_ViewAccountsByID" ReturnType="Collection(FBSModel.sp_ViewAccountsByID_Result)">
+          <Parameter Name="acctnumber" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_DepositandWithdraw" ReturnType="Collection(Int32)">
+            <Parameter Name="accountNumber" Mode="In" Type="String" />
+            <Parameter Name="type" Mode="In" Type="String" />
+            <Parameter Name="balance" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <EntitySet Name="tbl_TransactionDetails" EntityType="FBSModel.tbl_TransactionDetails" />
+          <FunctionImport Name="sp_MiniStatement" ReturnType="Collection(FBSModel.sp_MiniStatement_Result)">
+            <Parameter Name="search" Mode="In" Type="String" />
+            <Parameter Name="startdate" Mode="In" Type="DateTime" />
+            <Parameter Name="enddate" Mode="In" Type="DateTime" />
+            <Parameter Name="transactioncnt" Mode="In" Type="Int32" />
+            <Parameter Name="selected" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Transfer" ReturnType="Collection(Int32)">
+            <Parameter Name="srcacctnum" Mode="In" Type="String" />
+            <Parameter Name="destacctnum" Mode="In" Type="String" />
+            <Parameter Name="balance" Mode="In" Type="Decimal" />
+            <Parameter Name="type" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_SearchCustomer" ReturnType="Collection(FBSModel.sp_SearchCustomer_Result)">
+            <Parameter Name="option" Mode="In" Type="Int32" />
+            <Parameter Name="custid" Mode="In" Type="Int64" />
+            <Parameter Name="ssn" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="sp_ViewCustomersForDeleteByID" ReturnType="Collection(FBSModel.sp_ViewCustomersForDeleteByID_Result)">
+          <Parameter Name="id" Mode="In" Type="Int64" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="State">
+          <Key>
+            <PropertyRef Name="Stateid" />
+          </Key>
+          <Property Name="Stateid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Statename" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="City" Relationship="FBSModel.FK__City__Stateid__2C3393D0" FromRole="State" ToRole="City" />
+        </EntityType>
+        <EntityType Name="City">
+          <Key>
+            <PropertyRef Name="Cityid" />
+            <PropertyRef Name="Stateid" />
+          </Key>
+          <Property Name="Cityid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Stateid" Type="Int32" Nullable="false" />
+          <Property Name="Cityname" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="State" Relationship="FBSModel.FK__City__Stateid__2C3393D0" FromRole="City" ToRole="State" />
+        </EntityType>
+        <Association Name="FK__City__Stateid__2C3393D0">
+          <End Type="FBSModel.State" Role="State" Multiplicity="1" />
+          <End Type="FBSModel.City" Role="City" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="State">
+              <PropertyRef Name="Stateid" />
+            </Principal>
+            <Dependent Role="City">
+              <PropertyRef Name="Stateid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="sp_getstates_Result">
+          <Property Type="Int32" Name="Stateid" Nullable="false" />
+          <Property Type="String" Name="Statename" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="tbl_Customer_Details">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="CustomerID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SSN_ID" Type="Int64" Nullable="false" />
+          <Property Name="DateOfBirth" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="AddressLine1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AddressLine2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StateID" Type="Int32" Nullable="false" />
+          <Property Name="CityID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tbl_Customer_Account_Details" Relationship="FBSModel.FK__tbl_Custo__Custo__440B1D61" FromRole="tbl_Customer_Details" ToRole="tbl_Customer_Account_Details" />
+        </EntityType>
+        <ComplexType Name="sp_ViewCustomers_Result">
+          <Property Type="Int64" Name="CustomerID" Nullable="false" />
+          <Property Type="String" Name="CustomerName" Nullable="true" />
+          <Property Type="Int64" Name="SSN_ID" Nullable="false" />
+          <Property Type="DateTime" Name="DateOfBirth" Nullable="false" Precision="23" />
+          <Property Type="String" Name="Address" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="sp_getcities_Result">
+          <Property Type="Int32" Name="Cityid" Nullable="false" />
+          <Property Type="Int32" Name="Stateid" Nullable="false" />
+          <Property Type="String" Name="Cityname" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_ViewCustomersByID_Result">
+          <Property Type="Int64" Name="CustomerID" Nullable="false" />
+          <Property Type="String" Name="CustomerName" Nullable="true" />
+          <Property Type="Int64" Name="SSN_ID" Nullable="false" />
+          <Property Type="DateTime" Name="DateOfBirth" Nullable="false" Precision="23" />
+          <Property Type="String" Name="AddressLine1" Nullable="true" />
+          <Property Type="String" Name="AddressLine2" Nullable="true" />
+          <Property Type="Int32" Name="StateID" Nullable="false" />
+          <Property Type="Int32" Name="CityID" Nullable="false" />
+        </ComplexType>
+        <EntityType Name="tbl_Customer_Account_Details">
+          <Key>
+            <PropertyRef Name="AccountNumber" />
+          </Key>
+          <Property Name="CustomerId" Type="Int64" Nullable="false" />
+          <Property Name="AccountNumber" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="Balance" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="tbl_Customer_Details" Relationship="FBSModel.FK__tbl_Custo__Custo__440B1D61" FromRole="tbl_Customer_Account_Details" ToRole="tbl_Customer_Details" />
+          <Property Name="AccountTypeID" Type="Int32" />
+        </EntityType>
+        <Association Name="FK__tbl_Custo__Custo__440B1D61">
+          <End Type="FBSModel.tbl_Customer_Details" Role="tbl_Customer_Details" Multiplicity="1" />
+          <End Type="FBSModel.tbl_Customer_Account_Details" Role="tbl_Customer_Account_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Customer_Details">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="tbl_Customer_Account_Details">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="sp_ViewAccounts_Result">
+          <Property Type="Int64" Name="CustomerId" Nullable="false" />
+          <Property Type="String" Name="AccountNumber" Nullable="false" MaxLength="12" />
+          <Property Type="Decimal" Name="Balance" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="Int32" Name="AccountTypeID" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="tbl_Account_Types">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <ComplexType Name="sp_SearchAccount_Result">
+          <Property Type="Int64" Name="CustomerId" Nullable="false" />
+          <Property Type="String" Name="AccountNumber" Nullable="false" MaxLength="12" />
+          <Property Type="Decimal" Name="Balance" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="String" Name="AccountType" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="sp_ViewAccountsByID_Result">
+          <Property Type="Int64" Name="CustomerId" Nullable="false" />
+          <Property Type="String" Name="AccountNumber" Nullable="false" MaxLength="12" />
+          <Property Type="Decimal" Name="Balance" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="String" Name="AccountType" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <EntityType Name="tbl_TransactionDetails">
+          <Key>
+            <PropertyRef Name="TransactionId" />
+          </Key>
+          <Property Name="TransactionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SourceAccNum" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="DestinationAccNum" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="Amounttransacted" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="Typeoftransaction" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Dateoftransaction" Type="DateTime" Precision="3" />
+        </EntityType>
+        <ComplexType Name="sp_MiniStatement_Result">
+          <Property Type="Int32" Name="TransactionId" Nullable="false" />
+          <Property Type="String" Name="Typeoftransaction" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Dateoftransaction" Nullable="true" MaxLength="20" />
+          <Property Type="Decimal" Name="Amounttransacted" Nullable="true" Precision="10" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="sp_SearchCustomer_Result">
+          <Property Type="Int64" Name="CustomerID" Nullable="false" />
+          <Property Type="String" Name="CustomerName" Nullable="true" />
+          <Property Type="Int64" Name="SSN_ID" Nullable="false" />
+          <Property Type="String" Name="DateOfBirth" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Address" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_ViewCustomersForDeleteByID_Result">
+          <Property Type="Int64" Name="CustomerID" Nullable="false" />
+          <Property Type="String" Name="CustomerName" Nullable="true" />
+          <Property Type="Int64" Name="SSN_ID" Nullable="false" />
+          <Property Type="String" Name="DateOfBirth" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Address" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FBSModelStoreContainer" CdmEntityContainer="FBSEntities">
+          <EntitySetMapping Name="tbl_Login_details">
+            <EntityTypeMapping TypeName="FBSModel.tbl_Login_details">
+              <MappingFragment StoreEntitySet="tbl_Login_details">
+                <ScalarProperty Name="loginid" ColumnName="loginid" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="roleid" ColumnName="roleid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_checkLogin" FunctionName="FBSModel.Store.sp_checkLogin" />
+          <EntitySetMapping Name="State">
+            <EntityTypeMapping TypeName="FBSModel.State">
+              <MappingFragment StoreEntitySet="State">
+                <ScalarProperty Name="Statename" ColumnName="Statename" />
+                <ScalarProperty Name="Stateid" ColumnName="Stateid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="City">
+            <EntityTypeMapping TypeName="FBSModel.City">
+              <MappingFragment StoreEntitySet="City">
+                <ScalarProperty Name="Cityname" ColumnName="Cityname" />
+                <ScalarProperty Name="Stateid" ColumnName="Stateid" />
+                <ScalarProperty Name="Cityid" ColumnName="Cityid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_getstates" FunctionName="FBSModel.Store.sp_getstates">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="FBSModel.sp_getstates_Result">
+                <ScalarProperty Name="Stateid" ColumnName="Stateid" />
+                <ScalarProperty Name="Statename" ColumnName="Statename" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="tbl_Customer_Details">
+            <EntityTypeMapping TypeName="FBSModel.tbl_Customer_Details">
+              <MappingFragment StoreEntitySet="tbl_Customer_Details">
+                <ScalarProperty Name="CityID" ColumnName="CityID" />
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
+                <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
+                <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+                <ScalarProperty Name="SSN_ID" ColumnName="SSN_ID" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_InsertCustomerDetails" FunctionName="FBSModel.Store.sp_InsertCustomerDetails" />
+          <FunctionImportMapping FunctionImportName="sp_ViewCustomers" FunctionName="FBSModel.Store.sp_ViewCustomers">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="FBSModel.sp_ViewCustomers_Result">
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="SSN_ID" ColumnName="SSN_ID" />
+                <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_getcities" FunctionName="FBSModel.Store.sp_getcities">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="FBSModel.sp_getcities_Result">
+                <ScalarProperty Name="Cityid" ColumnName="Cityid" />
+                <ScalarProperty Name="Stateid" ColumnName="Stateid" />
+                <ScalarProperty Name="Cityname" ColumnName="Cityname" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_UpdateCustomerDetails" FunctionName="FBSModel.Store.sp_UpdateCustomerDetails" />
+          <FunctionImportMapping FunctionImportName="sp_ViewCustomersByID" FunctionName="FBSModel.Store.sp_ViewCustomersByID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="FBSModel.sp_ViewCustomersByID_Result">
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="SSN_ID" ColumnName="SSN_ID" />
+                <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+                <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
+                <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="CityID" ColumnName="CityID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="tbl_Customer_Account_Details">
+            <EntityTypeMapping TypeName="FBSModel.tbl_Customer_Account_Details">
+              <MappingFragment StoreEntitySet="tbl_Customer_Account_Details">
+                <ScalarProperty Name="AccountTypeID" ColumnName="AccountTypeID" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_DeleteAccount" FunctionName="FBSModel.Store.sp_DeleteAccount" />
+          <FunctionImportMapping FunctionImportName="sp_InsertAccountDetails" FunctionName="FBSModel.Store.sp_InsertAccountDetails" />
+          <FunctionImportMapping FunctionImportName="sp_ViewAccounts" FunctionName="FBSModel.Store.sp_ViewAccounts">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="FBSModel.sp_ViewAccounts_Result">
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="AccountTypeID" ColumnName="AccountTypeID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="tbl_Account_Types">
+            <EntityTypeMapping TypeName="FBSModel.tbl_Account_Types">
+              <MappingFragment StoreEntitySet="tbl_Account_Types">
+                <ScalarProperty Name="AccountType" ColumnName="AccountType" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_DeleteCustomerByID" FunctionName="FBSModel.Store.sp_DeleteCustomerByID" />
+          <FunctionImportMapping FunctionImportName="sp_getAccountsofCustomer" FunctionName="FBSModel.Store.sp_getAccountsofCustomer" />
+          <FunctionImportMapping FunctionImportName="sp_SearchAccount" FunctionName="FBSModel.Store.sp_SearchAccount">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="FBSModel.sp_SearchAccount_Result">
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="AccountType" ColumnName="AccountType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_ViewAccountsByID" FunctionName="FBSModel.Store.sp_ViewAccountsByID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="FBSModel.sp_ViewAccountsByID_Result">
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="AccountType" ColumnName="AccountType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_DepositandWithdraw" FunctionName="FBSModel.Store.sp_DepositandWithdraw" />
+          <EntitySetMapping Name="tbl_TransactionDetails">
+            <EntityTypeMapping TypeName="FBSModel.tbl_TransactionDetails">
+              <MappingFragment StoreEntitySet="tbl_TransactionDetails">
+                <ScalarProperty Name="Dateoftransaction" ColumnName="Dateoftransaction" />
+                <ScalarProperty Name="Typeoftransaction" ColumnName="Typeoftransaction" />
+                <ScalarProperty Name="Amounttransacted" ColumnName="Amounttransacted" />
+                <ScalarProperty Name="DestinationAccNum" ColumnName="DestinationAccNum" />
+                <ScalarProperty Name="SourceAccNum" ColumnName="SourceAccNum" />
+                <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_MiniStatement" FunctionName="FBSModel.Store.sp_MiniStatement">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="FBSModel.sp_MiniStatement_Result">
+                <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
+                <ScalarProperty Name="Typeoftransaction" ColumnName="Typeoftransaction" />
+                <ScalarProperty Name="Dateoftransaction" ColumnName="Dateoftransaction" />
+                <ScalarProperty Name="Amounttransacted" ColumnName="Amounttransacted" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_Transfer" FunctionName="FBSModel.Store.sp_Transfer" />
+          <FunctionImportMapping FunctionImportName="sp_SearchCustomer" FunctionName="FBSModel.Store.sp_SearchCustomer">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="FBSModel.sp_SearchCustomer_Result">
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="SSN_ID" ColumnName="SSN_ID" />
+                <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_ViewCustomersForDeleteByID" FunctionName="FBSModel.Store.sp_ViewCustomersForDeleteByID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="FBSModel.sp_ViewCustomersForDeleteByID_Result">
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="SSN_ID" ColumnName="SSN_ID" />
+                <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

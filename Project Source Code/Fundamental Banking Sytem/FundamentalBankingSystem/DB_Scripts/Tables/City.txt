@@ -1,0 +1,4 @@
+CREATE TABLE City(
+Cityid INT  IDENTITY(1,1) NOT NULL,
+Stateid int FOREIGN KEY REFERENCES State(Stateid) NOT NULL,
+Cityname nvarchar(max) NULL)
