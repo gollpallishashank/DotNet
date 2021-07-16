@@ -1,0 +1,25 @@
+
+.container1 {
+  background: url(../../Images/logpic2.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  min-height: 400px;
+}
+
+.panel-default {
+opacity: 0.95;
+margin-top:80px;
+}
+.form-group.last { margin-bottom:0px; }
+
+
+.containerWithdraw {
+  background: url(../../Images/withdraw.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  min-height: 400px;
+}
